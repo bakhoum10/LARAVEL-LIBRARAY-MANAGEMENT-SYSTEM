@@ -1,5 +1,8 @@
-<?php
+<?php 
 
+use Illuminate\Http\Request;
+use App\Models\User;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\auth\LoginController;
 use App\Http\Controllers\AutherController;
 use App\Http\Controllers\BookController;
@@ -10,6 +13,7 @@ use App\Http\Controllers\PublisherController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -30,6 +34,8 @@ Route::get('/', function () {
 Route::post('/', [LoginController::class, 'login'])->name('login');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::post('/Change-password', [LoginController::class, 'changePassword'])->name('change_password');
+Route::get('/home',[HomeController::class, 'index'])->name('home');
+
 
 
 Route::middleware('auth')->group(function () {
@@ -96,7 +102,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/monthly-Wise', [ReportsController::class, 'month_wise'])->name('reports.month_wise');
     Route::post('/reports/monthly-Wise', [ReportsController::class, 'generate_month_wise_report'])->name('reports.month_wise_generate');
     Route::get('/reports/not-returned', [ReportsController::class, 'not_returned'])->name('reports.not_returned');
+    
+    Route::post('/register', [UserController::class, 'register'])->name('register');
 
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     Route::post('/settings', [SettingsController::class, 'update'])->name('settings');
+    Route::get('/register', [UserController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [UserController::class, 'register'])->name('register.submit');
+    
+    // Route pour la page de connexion de l'administrateur
+    Route::post('/admin/login', [AuthController::class, 'login'])->name('admin.login');
+    
+
 });
+
